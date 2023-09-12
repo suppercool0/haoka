@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.HaokaOrderMapper">
+    
+    <resultMap type="HaokaOrder" id="HaokaOrderResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="price"    column="price"    />
+        <result property="address"    column="address"    />
+        <result property="receivePhoneNumber"    column="receive_phone_number"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectHaokaOrderVo">
+        select order_id, mobile, price, address, receive_phone_number, create_time, update_time, user_id, status from haoka_order
+    </sql>
+
+    <select id="selectHaokaOrderList" parameterType="HaokaOrder" resultMap="HaokaOrderResult">
+        <include refid="selectHaokaOrderVo"/>
+        <where>  
+            <if test="mobile != null "> and mobile = #{mobile}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="receivePhoneNumber != null "> and receive_phone_number = #{receivePhoneNumber}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectHaokaOrderByOrderId" parameterType="Long" resultMap="HaokaOrderResult">
+        <include refid="selectHaokaOrderVo"/>
+        where order_id = #{orderId}
+    </select>
+        
+    <insert id="insertHaokaOrder" parameterType="HaokaOrder">
+        insert into haoka_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="price != null">price,</if>
+            <if test="address != null">address,</if>
+            <if test="receivePhoneNumber != null">receive_phone_number,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="price != null">#{price},</if>
+            <if test="address != null">#{address},</if>
+            <if test="receivePhoneNumber != null">#{receivePhoneNumber},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHaokaOrder" parameterType="HaokaOrder">
+        update haoka_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="receivePhoneNumber != null">receive_phone_number = #{receivePhoneNumber},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteHaokaOrderByOrderId" parameterType="Long">
+        delete from haoka_order where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteHaokaOrderByOrderIds" parameterType="String">
+        delete from haoka_order where order_id in 
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+</mapper>
